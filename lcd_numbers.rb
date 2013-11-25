@@ -92,8 +92,46 @@ class LCDDisplay
       puts "\n"
     end
   end
-
+  def create_lcd_digit_array(s)
+    col_size = s+2
+    row_size = col_size+s+1
+    dig_arr = Array.new(row_size) { Array.new(col_size,"-")}
+  end
+  def apply_row_pattern(dig_arr,row_num,flag)
+    case flag
+    when "H" #horizontal
+      dig_arr[row_num][0] = " "
+      dig_arr[row_num][-1] = " "
+    when "L" #left vertical bar only
+      (0..dig_arr[row_num].length-1).each do |i|
+        dig_arr[row_num][i] = " "
+      end 
+      dig_arr[row_num][0] = "|"
+    when "R" #right vertical bar only
+      (0..dig_arr[row_num].length-1).each do |i|
+        dig_arr[row_num][i] = " "
+      end 
+      dig_arr[row_num][-1] = "|"
+    when "B" #both right and left vertical
+      (0..dig_arr[row_num].length-1).each do |i|
+        dig_arr[row_num][i] = " "
+      end 
+      dig_arr[row_num][0] = "|"
+      dig_arr[row_num][-1] = "|"
+    end
+    return dig_arr
+  end
+  def concatenate_digits(m_arr,n_arr)
+    #put digits m,n together in one LCD array
+    lcd_arr = Array.new(m_arr.size)
+    (0..lcd_arr.length-1).each do |i|
+      lcd_arr[i]<<m_arr[i]<<n_arr[i]
+      lcd_arr[i].flatten!
+    end
+    lcd_arr
+  end
 end
 
 lcd_d = LCDDisplay.new(ARGV[1],ARGV[2])
 lcd_d.number_display
+p lcd_d.create_lcd_digit_array(2)
